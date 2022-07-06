@@ -200,7 +200,8 @@ void setup() {
   pinMode(FIRE_BUTTON2, INPUT);
   digitalWrite(FIRE_BUTTON2, HIGH);
   pinMode(VENTING, OUTPUT);
-  digitalWrite(VENTING, HIGH);
+  //digitalWrite(VENTING, HIGH);  // Original line changed as relay started on untill wand start up switch was toggled
+  digitalWrite(VENTING, LOW);
   pinMode(RUMBLE, OUTPUT);
   digitalWrite(RUMBLE, LOW);
 
