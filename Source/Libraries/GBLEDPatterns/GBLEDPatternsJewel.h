@@ -61,7 +61,9 @@ class NeoPatterns : public Adafruit_NeoPixel
     */
 
     const uint8_t CyclotronLEDs = 28;
-    const uint8_t PowerCellLEDs = 16;
+    //Original code
+    //const uint8_t PowerCellLEDs = 16;
+    const uint8_t PowerCellLEDs = 17; // changed to address issue when using 2x8Bit LED boards for the powercell. after the start up sequence the top LED would stay lit if using a value less than 16 LEDs in the main code "Cyclotron + PowerCell LED Count" value.
 
     const uint8_t CyclotronLED1Start = 0;
     const uint8_t CyclotronLED1End = 6;
@@ -541,7 +543,7 @@ class NeoPatterns : public Adafruit_NeoPixel
         }
       }
       else
-      { 
+      {
         // *** Christmas THEME LED routine *** //
         switch (IndexC)
         {
@@ -605,7 +607,7 @@ class NeoPatterns : public Adafruit_NeoPixel
           break;
       }
     }
-    
+
     /*
      * Venting Pack LED Update Function
      */
@@ -621,7 +623,7 @@ class NeoPatterns : public Adafruit_NeoPixel
       }
       show();
     }
-    
+
     /*
      * Power down LED Update Function
      */
@@ -634,7 +636,7 @@ class NeoPatterns : public Adafruit_NeoPixel
       show();
       IncrementPC();
     }
-    
+
     /*
      * Clear Powercell Update Function
      */
@@ -692,7 +694,7 @@ class NeoPatterns : public Adafruit_NeoPixel
       IntervalChange = interval;
       IntervalChangeFlag = true;
     }
-    
+
     /*
      * Change the cyclotron intervals
      */
@@ -754,7 +756,7 @@ class NeoPatterns : public Adafruit_NeoPixel
 
     /*
      * This is a fading function that is used to help with the cyclotron fading and power up.
-     * 
+     *
      * Its sligntly modified to help fade only selected LED's that are called.
      */
     void fade(byte redStartValue, byte redEndValue, byte greenStartValue, byte greenEndValue, byte blueStartValue, byte blueEndValue, int totalSteps, int startLED, int endLED)
