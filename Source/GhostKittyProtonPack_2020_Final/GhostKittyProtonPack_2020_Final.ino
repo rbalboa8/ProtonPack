@@ -96,7 +96,8 @@ const int GunLEDEnd = 16;
 // *** Note these constants may change if you are using different LED counts, E.g. 1 LED vs a 7 LED Neopixel Jewel *** //
 
 // Cyclotron + PowerCell LED Count
-const int NeoPixelLEDCount1 = 44;
+// const int NeoPixelLEDCount1 = 44; // original value
+const int NeoPixelLEDCount1 = 43; // changed to use 15 Bits as the PowerCell number
 
 // Vent + Wand LED Count
 const int NeoPixelLEDCount2 = 17;
