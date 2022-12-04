@@ -15,6 +15,8 @@
 #include <BGSequence.h>
 BGSequence BarGraph;
 
+// Select Bargraph type Common Anode OR Common Cathode
+
 // **** Different Bargraph sequence modes **** //
 enum BarGraphSequences { START, ACTIVE, FIRE1, FIRE2, BGVENT };
 BarGraphSequences BGMODE;
