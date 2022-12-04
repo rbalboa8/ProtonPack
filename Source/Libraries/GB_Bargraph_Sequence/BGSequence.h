@@ -1,9 +1,9 @@
-/* 
+/*
     Ghostbusters Bargraph Sequences
-   
+
     This is the source code for 5 seperate bargraph sequence patterns for a ghostbusters neutrino wand
     Author Mike Simone - August 2020
-    
+
     Simple Circuit:
     The pinout for the BarGraph can be found online, the supplier is BarMeter.com
     There are 7 "row" outputs and 4 "column" references (7 blocks of 4 leds in total,Reference pins A0-A6 and C0-C3 of the HT16K33 Board)
@@ -62,7 +62,10 @@ const bool BGLEDStateFire2[16][28] PROGMEM  = {
    Reindex Bargraph to be able to call segments from 0-27
    The BarGraph is indexed with a 4 x 7 matrix as per the datasheet from BarMeter.com
 */
-const uint8_t barGraph[28][2]  = {
+
+/* "original" common Anode BL28-3005SA04Y Bargraph code
+*/
+const uint8_t barGraphA[28][2]  = {
   {0, 0},
   {0, 1},
   {0, 2},
@@ -93,6 +96,41 @@ const uint8_t barGraph[28][2]  = {
   {6, 3},
 };
 
+/* "Facebook user Edoardo Tavilla" common Cathode BL28-3005SA04Y Bargraph code
+*/
+
+/*
+const uint8_t barGraphC[28][2]  = {
+  {0, 0},
+  {1, 0},
+  {2, 0},
+  {3, 0},
+  {0, 1},
+  {1, 1},
+  {2, 1},
+  {3, 1},
+  {0, 2},
+  {1, 2},
+  {2, 2},
+  {3, 2},
+  {0, 3},
+  {1, 3},
+  {2, 3},
+  {3, 3},
+  {0, 4},
+  {1, 4},
+  {2, 4},
+  {3, 4},
+  {0, 5},
+  {1, 5},
+  {2, 5},
+  {3, 5},
+  {0, 6},
+  {1, 6},
+  {2, 6},
+  {3, 6},
+};
+*/
 
 class BGSequence  {
   public:
