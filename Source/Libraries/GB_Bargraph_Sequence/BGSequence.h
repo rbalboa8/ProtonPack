@@ -65,7 +65,7 @@ const bool BGLEDStateFire2[16][28] PROGMEM  = {
 
 /* "original" common Anode BL28-3005SA04Y Bargraph code
 */
-const uint8_t barGraphA[28][2]  = {
+const uint8_t barGraph[28][2]  = {
   {0, 0},
   {0, 1},
   {0, 2},
@@ -100,7 +100,7 @@ const uint8_t barGraphA[28][2]  = {
 */
 
 /*
-const uint8_t barGraphC[28][2]  = {
+const uint8_t barGraph[28][2]  = {
   {0, 0},
   {1, 0},
   {2, 0},
