@@ -63,7 +63,7 @@ const bool BGLEDStateFire2[16][28] PROGMEM  = {
    The BarGraph is indexed with a 4 x 7 matrix as per the datasheet from BarMeter.com
 */
 
-/* "original MikeS11 code version" common Cathode BL28-3005SA04Y Bargraph code
+/* "original MikeS11 code version" BL28-3005SA04Y (A Version) Bargraph code
 */
 const uint8_t barGraph[28][2]  = {
   {0, 0},
@@ -96,7 +96,7 @@ const uint8_t barGraph[28][2]  = {
   {6, 3},
 };
 
-/* "Facebook user Edoardo Tavilla" common Anode BL28-3005SA04Y Bargraph code
+/* "Facebook user Edoardo Tavilla" BL28-3005SK04Y (K Version) Bargraph code
 */
 
 /*
