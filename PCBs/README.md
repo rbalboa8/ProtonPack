@@ -46,8 +46,8 @@ A simple PCB to connect the bargraph LED Matrix to the HT16K33 driver board. The
 
 <div style="display: flex; flex-direction: row; gap: 10px;">
   <img src="README_Images/PCB-BL28Z-3005ZSA04Y-BothSides.jpeg" alt="Image of both sides of a custom designed PCB to connect an 28 segment LED Audio Bargraph to the HT16K33 driver board BL28Z-3005ZSA04Y to use in a Ghostbuster Proton Pack Wand Prop" width="300"/>
-  <img src="README_Images/PCB-BL28Z-3005ZSA04Y- BargraphSide.jpeg" alt="Image of the top side of a custom designed PCB to connect an 28 segment LED Audio Bargraph to the HT16K33 driver board BL28Z-3005ZSA04Y to use in a Ghostbuster Proton Pack Wand Prop" width="300"/>
-  <img src="README_Images/PCB-BL28Z-3005ZSA04Y- HT16K33DriverSide.jpeg" alt="Image of the bottom side of a custom designed PCB to connect an 28 segment LED Audio Bargraph to the HT16K33 driver board BL28Z-3005ZSA04Y to use in a Ghostbuster Proton Pack Wand Prop" width="300"/>
+  <img src="README_Images/PCB-BL28Z-3005ZSA04Y-BargraphSide.jpeg" alt="Image of the top side of a custom designed PCB to connect an 28 segment LED Audio Bargraph to the HT16K33 driver board BL28Z-3005ZSA04Y to use in a Ghostbuster Proton Pack Wand Prop" width="300"/>
+  <img src="README_Images/PCB-BL28Z-3005ZSA04Y-HT16K33DriverSide.jpeg" alt="Image of the bottom side of a custom designed PCB to connect an 28 segment LED Audio Bargraph to the HT16K33 driver board BL28Z-3005ZSA04Y to use in a Ghostbuster Proton Pack Wand Prop" width="300"/>
 </div>
 
 
