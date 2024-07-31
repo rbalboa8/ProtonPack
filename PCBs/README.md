@@ -43,12 +43,9 @@ A simple PCB to connect the bargraph LED Matrix to the HT16K33 driver board. The
 ### BL28Z-3005ZSA04Y (A Version) Bargraph Version
 
 - This is the recommended version and will only work with the Common Anode version of the bargraph, BL28Z-3005ZSA04Y. No code change is required to make this version work with the MikeS11 code.
-<p align="center">
-<img src="PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-BothSides.jpg?raw=true" alt="Prototype" width="504"  height="442"></p>
-<p align="center">
-<img src="PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-BargraphSide.jpg?raw=true" alt="Prototype" width="504"  height="442"></p>
-<p align="center">
-<img src="PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-DriverSide.jpg?raw=true" alt="Prototype" width="504"  height="442"></p>
+![Alt text](PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-BothSides.jpg)
+![Alt text](PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-BargraphSide.jpg)
+![Alt text](PCBs/rbalboa8_Designs/BargraphToDriverBoardPCB/README_Images/PCB-BL28Z-3005ZSA04Y-DriverSide.jpg?)
 
 ### BL28Z-3005ZSK04Y (K Version) Bargraph Version
 
