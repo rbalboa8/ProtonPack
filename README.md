@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/MikeS11/ProtonPack">
-    <img src="README_Images/MikeS11_Logo.jpg?raw=true" alt="Logo" width="180" height="200">
+    <img src="Media/Images/README_Images/MikeS11_Logo.jpg?raw=true" alt="Logo" width="180" height="200">
   </a>
 
   <h3 align="center">GhostKitty Proton Pack</h3>
@@ -39,10 +39,10 @@
   <a href="https://www.youtube.com/watch?v=9ePM4p-J3tE"><img src="https://img.youtube.com/vi/9ePM4p-J3tE/0.jpg" alt="GhostKitty Proton Pack"></a>  
 
 Original Prototype <br />
-<img src="README_Images/ArduinoPrototype.jpg?raw=true" alt="Prototype" width="640" height="480"></p>
+<img src="Media/Images/README_Images/ArduinoPrototype.jpg?raw=true" alt="Prototype" width="640" height="480"></p>
 
 Afterlife Cyclotron 40 segment LED ring<br />
-<img src="README_Images/AfterLifeCyclotron.jpg?raw=true" alt="Prototype" width="504"  height="442"></p>
+<img src="Media/Images/README_Images/AfterLifeCyclotron.jpg?raw=true" alt="Prototype" width="504"  height="442"></p>
 </div>
 
 I want this to be a source for anyone to use to create their own proton pack kits for as cheap as possible and still include all the features for a rumble motor, 2 firing mechanisms, all functioning LEDs in the wand, pack themes, full 28 segment bar graph, and an output for a vent kit.
@@ -95,9 +95,9 @@ You are going to need to install the following libraries:
 ### Wand Configuration
 
 <p align="center">
-<img src="README_Images/WandLEDs.jpg?raw=true" alt="Wand LEDs"></p>
+<img src="Media/Images/README_Images/WandLEDs.jpg?raw=true" alt="Wand LEDs"></p>
 <p align="center">
-<img src="README_Images/WandSwitches.jpg?raw=true" alt="Wand Switches"></p>
+<img src="Media/Images/README_Images/WandSwitches.jpg?raw=true" alt="Wand Switches"></p>
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -149,4 +149,4 @@ Project Link: [https://github.com/MikeS11/ProtonPack](https://github.com/MikeS11
 [license-url]: https://github.com/MikeS11/ProtonPack/blob/master/LICENSE.txt
 [twitter-shield]: https://img.shields.io/badge/-Twitter-black.svg?style=flat-square&logo=Twitter&colorB=555
 [twitter-url]: https://Twitter.com/mikesimone3
-[product-screenshot]: README_Images/screenshot.png
+[product-screenshot]: Media/Images/README_Images/screenshot.png
