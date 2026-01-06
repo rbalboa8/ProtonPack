@@ -1,13 +1,4 @@
-/* Ghostbusters Bargraph Sequences
-   
-    This is the source code for 5 separate bargraph sequence patterns for a ghostbusters neutrino wand
-    Author Mike Simone - August 2020
-    
-    Modified 2025:
-    - Added hardware selection types (Common Anode/Cathode).
-    - Added separate mapping arrays for different hardware layouts.
-    - Added testLed helper function.
-*/
+/* Ghostbusters Bargraph Sequences - Header */
 
 #ifndef BGSEQUENCE_H
 #define BGSEQUENCE_H
@@ -25,10 +16,6 @@ typedef enum {
   BARGRAPH_COMMON_ANODE,
   BARGRAPH_COMMON_CATHODE
 } bargraph_hardware_t;
-
-// Animation direction defines
-#define FORWARD 1
-#define REVERSE 0
 
 // PROGMEM Animation Frames
 const bool BGLEDStateFire1[14][28] PROGMEM = {
@@ -67,11 +54,7 @@ const bool BGLEDStateFire2[16][28] PROGMEM  = {
   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 };
 
-/*
-    Coordinate Mapping Arrays
-*/
-
-// Original Common Anode Map
+// Original Anode Mapping
 const uint8_t barGraph_anode[28][2] = {
   {0, 0}, {0, 1}, {0, 2}, {0, 3}, {1, 0}, {1, 1}, {1, 2}, {1, 3},
   {2, 0}, {2, 1}, {2, 2}, {2, 3}, {3, 0}, {3, 1}, {3, 2}, {3, 3},
@@ -79,7 +62,7 @@ const uint8_t barGraph_anode[28][2] = {
   {6, 0}, {6, 1}, {6, 2}, {6, 3}
 };
 
-// Common Cathode Map
+// Your discovered Cathode Mapping
 const uint8_t barGraph_cathode[28][2] = {
   {0, 0}, {1, 0}, {2, 0}, {3, 0}, {0, 1}, {1, 1}, {2, 1}, {3, 1},
   {0, 2}, {1, 2}, {2, 2}, {3, 2}, {0, 3}, {1, 3}, {2, 3}, {3, 3},
@@ -89,13 +72,13 @@ const uint8_t barGraph_cathode[28][2] = {
 
 class BGSequence {
   public:
-    // Constructor
     BGSequence();
+    
+    // Internal enum to avoid name collision with other libraries
+    enum BGDir { BG_FORWARD, BG_REVERSE };
+    BGDir DirectionBG;
 
-    // Initialization
     void BGSeq(bargraph_hardware_t hardwareType = BARGRAPH_COMMON_ANODE);
-
-    // Methods
     void initiateVariables(uint8_t BGMODE);
     void changeInterval(uint8_t NewInterval);
     void sequenceFire1(unsigned long currentMillis);
@@ -108,9 +91,7 @@ class BGSequence {
     void drawBarGraph( uint8_t row, uint8_t col, uint8_t val );
     void testLed(uint8_t led, uint8_t val);
 
-    // Public members matching original logic
     int IndexSegment;
-    uint8_t DirectionBG;
     unsigned long IntervalBG = 50;
     unsigned long IntervalVENT = 2500;
     bool startVent = true;
@@ -118,7 +99,6 @@ class BGSequence {
     unsigned long lastUpdateVENT;
 
   private:
-    // Pointer to active mapping array
     const uint8_t (*activeMap)[2];
 };
 

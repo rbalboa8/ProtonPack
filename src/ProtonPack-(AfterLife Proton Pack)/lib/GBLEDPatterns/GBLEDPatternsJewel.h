@@ -31,11 +31,16 @@ class NeoPatterns : public Adafruit_NeoPixel
     unsigned long lastUpdatePC;     // last update of position
     uint8_t themeMode;
 
+    unsigned long FadeCyc = 60;
+    unsigned long FadeCycChange = 60;
+    unsigned long cycfadeTimer = 10;
+    unsigned long cycfadeTimerChange = 10;
+    unsigned long lastFade = 0;
+    int fadeStep = 0;               // state variable for fade function
+
     // Added these variables to handle the change in fading speeds when firing
     bool fadeComplete = false;
     bool IntervalChangeFlag = false;
-    bool AfterLifeFiring = false;
-    uint8_t mytime;
 
     /*
        The following provide an index position of the LED's to determine which one you want to change in the loop sequence
@@ -48,31 +53,24 @@ class NeoPatterns : public Adafruit_NeoPixel
     uint16_t TotalStepsPC;          // total number of steps in the PowerCell pattern
 
     uint32_t Color1, Color2;        // What colors are in use
-    int fadeStep = 0;               // state variable for fade function
+
     uint16_t PCSegIndex;            //
 
     /*
        Cyclotron & Powercell references
     */
 
-    const uint8_t CyclotronLEDs = 40;
+    const uint8_t CyclotronLEDs = 28;
     const uint8_t PowerCellLEDs = 17;
 
-    uint16_t IndexCLEDArray;
-    const uint8_t   NUM_LEDS = 40;
-    const uint8_t  CyclotronLEDCount = 40;
-    const int CyclotronLEDArray[40] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    /*
-        CYCLOTRON LED Pattern (Note: LED reference will still be 0-19, timing will reference 31 spots)
-        0 - 4 LED (Lower right Cyclotron Lens)
-        5 BLANK (No LED's)
-        6-10 LED  (Lower left Cyclotron Lens)
-        11-13 BLANK (No LED's)
-        14 - 18 LED (Upper left Cyclotron Lens)
-        19 - 22 BLANK (No LED's)
-        23 - 27 LED (Upper right Cyclotron Lens)
-        28-30 BLANK (No LED's)
-    */
+    const uint8_t CyclotronLED1Start = 0;
+    const uint8_t CyclotronLED1End = 6;
+    const uint8_t CyclotronLED2Start = 7;
+    const uint8_t CyclotronLED2End = 13;
+    const uint8_t CyclotronLED3Start = 14;
+    const uint8_t CyclotronLED3End = 20;
+    const uint8_t CyclotronLED4Start = 21;
+    const uint8_t CyclotronLED4End = 27;
 
     bool cycNormalStart = false;      // Used on the first routine to clear all LEDs before you start the sequence
 
@@ -97,8 +95,6 @@ class NeoPatterns : public Adafruit_NeoPixel
     */
     void Update()
     {
-      //CyclotronUpdate();
-
       if ((millis() - lastUpdateC) > Interval) // Time to update Cyclotron ?
       {
         lastUpdateC = millis();
@@ -138,6 +134,75 @@ class NeoPatterns : public Adafruit_NeoPixel
             break;
         }
       }
+      /*
+         Added to handle the fading for the cyclotron.
+         Only if the pattern is CYCLOTRON, the routine has started and the theme is not Christmas
+         Note - The Christmas theme does not fade
+      */
+      if (ActivePattern1 == CYCLOTRON && cycNormalStart == true && themeMode != 4)
+      {
+
+        if ((millis() - lastFade) > cycfadeTimer) // time to update
+        {
+          lastFade = millis();
+          switch (IndexC)
+          {
+            case 0:
+              if (fadeComplete == false)
+              {
+                if (themeMode != 2)
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, FadeCyc, CyclotronLED3Start, CyclotronLED3End);
+                }
+                else
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, 120, CyclotronLED3Start, CyclotronLED3End);
+                }
+              }
+              break;
+            case 1:
+              if (fadeComplete == false)
+              {
+                if (themeMode != 2)
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, FadeCyc, CyclotronLED4Start, CyclotronLED4End);
+                }
+                else
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, 120, CyclotronLED4Start, CyclotronLED4End);
+                }
+              }
+              break;
+
+            case 2:
+              if (fadeComplete == false)
+              {
+                if (themeMode != 2)
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, FadeCyc, CyclotronLED1Start, CyclotronLED1End);
+                }
+                else
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, 120, CyclotronLED1Start, CyclotronLED1End);
+                }
+              }
+              break;
+            case 3:
+              if (fadeComplete == false)
+              {
+                if (themeMode != 2)
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, FadeCyc, CyclotronLED2Start, CyclotronLED2End);
+                }
+                else
+                {
+                  fade(Red(Color1), 0, Green(Color1), 0, Blue(Color1), 0, 120, CyclotronLED2Start, CyclotronLED2End);
+                }
+              }
+              break;
+          }
+        }
+      }
     }
 
     /*
@@ -147,35 +212,26 @@ class NeoPatterns : public Adafruit_NeoPixel
     {
       if (ActivePattern1 == CYCLOTRON)
       {
-        if (CyclotronLEDArray[IndexC] == 1)
-        {
-          IndexCLEDArray++;
-        }
         IndexC++;
+        /*
+           Added the following to sync the changes for timed interval changes
+        */
+        if (IntervalChangeFlag == true)
+        {
+          IntervalChangeCall();
+          IntervalChangeFlag = false;
+        }
+        // Reset the counter if you have completed through all 4 states
         if (IndexC >= TotalStepsC)
         {
           IndexC = 0;
-          IndexCLEDArray = 0;
-          if (themeMode == 4)
-          {
-            if (Color1 == Wheel(255))
-            {
-              Color1 = Wheel(85);
-            }
-            else
-            {
-              Color1 = Wheel(255);
-            }
-          }
           if (OnCompleteC != NULL)
           {
-
             OnCompleteC(); // call the completion callback
           }
         }
       }
     }
-
     /*
        Increment the Powercell LED state
     */
@@ -188,7 +244,7 @@ class NeoPatterns : public Adafruit_NeoPixel
           IndexPC++;
           if (IndexPC >= TotalStepsPC)
           {
-            IndexPC = CyclotronLEDCount;            // *** Reset the index (After the Cyclotron LEDs) *** //
+            IndexPC = CyclotronLEDs;            // *** Reset the index (After the Cyclotron LEDs) *** //
             if (OnCompletePC != NULL)
             {
               OnCompletePC(); // call the completion callback
@@ -200,7 +256,7 @@ class NeoPatterns : public Adafruit_NeoPixel
           --IndexPC;
           if (ActivePattern2 == POWERCELL_BOOT)
           {
-            if (IndexPC - PCSegIndex < CyclotronLEDCount)
+            if (IndexPC - PCSegIndex < CyclotronLEDs)
             {
               IndexPC = TotalStepsPC - 1;               // *** If the powercell index reaches the cyclotron index, reset back to the top
               PCSegIndex++;                             // -1 to account for the zero position
@@ -254,7 +310,7 @@ class NeoPatterns : public Adafruit_NeoPixel
       ActivePattern2 = POWERCELL_BOOT;
       Interval2 = interval;
       PCSegIndex = 0;
-      TotalStepsPC = CyclotronLEDCount + PowerCellLEDs;
+      TotalStepsPC = CyclotronLEDs + PowerCellLEDs;
       Color2 = color1;
       IndexPC = TotalStepsPC;
       Direction = dir;
@@ -268,9 +324,9 @@ class NeoPatterns : public Adafruit_NeoPixel
       // ** Forward direction, reset the powercell index variables ** //
       ActivePattern2 = POWERCELL;
       Interval2 = interval;
-      TotalStepsPC = CyclotronLEDCount + PowerCellLEDs;
+      TotalStepsPC = CyclotronLEDs + PowerCellLEDs;
       Color2 = color1;
-      IndexPC = CyclotronLEDCount;
+      IndexPC = CyclotronLEDs;
       Direction = dir;
     }
 
@@ -295,22 +351,15 @@ class NeoPatterns : public Adafruit_NeoPixel
     void Cyclotron(uint32_t color1, uint32_t interval, uint8_t tmode)  //enum PackTheme { MOVIE, STATIS, SLIME, MESON, CHRISTMAS };
     {
       // ** reset the cyclotron index variables ** //
+      IndexC = 0;
       themeMode = tmode;
       ActivePattern1 = CYCLOTRON;
-      TotalStepsC = CyclotronLEDs;
-      if (themeMode == 1)
-      {
-        Interval = 5;
-      }
-      else
-      {
-        Interval = interval;
-      }
-
-
+      Interval = interval;
       fadeStep = 0;
       cycNormalStart = false;           // has the routine started yet? ( used to clear LED's and start the cycle again )
       fadeComplete = false;
+      TotalStepsC = 4;
+      lastFade = 0;
 
       /*
         Changes the cyclotron to the THEME colors
@@ -321,11 +370,11 @@ class NeoPatterns : public Adafruit_NeoPixel
           Color1 = Wheel(255);
           break;
         case 1:
-          Color1 = Wheel(255);
+          Color1 = Wheel(190);
           break;
         case 2:
           Color1 = Wheel(85);
-          for (uint8_t i = 0; i < CyclotronLEDCount; i++)
+          for (uint8_t i = 0; i < CyclotronLEDs; i++)
           {
             setPixelColor(i, Color1);
           }
@@ -369,7 +418,7 @@ class NeoPatterns : public Adafruit_NeoPixel
     */
     void PowercellBootUpdate()
     {
-      for (uint8_t i = CyclotronLEDCount; i < CyclotronLEDCount + PowerCellLEDs; i++)
+      for (uint8_t i = CyclotronLEDs; i < CyclotronLEDs + PowerCellLEDs; i++)
       {
         if (i == IndexPC)  // Scan Pixel to the right
         {
@@ -377,7 +426,7 @@ class NeoPatterns : public Adafruit_NeoPixel
         }
         else
         {
-          for (uint8_t j = CyclotronLEDCount + PCSegIndex; j < CyclotronLEDCount + PowerCellLEDs; j++)
+          for (uint8_t j = CyclotronLEDs + PCSegIndex; j < CyclotronLEDs + PowerCellLEDs; j++)
           {
             if (j != IndexPC )
             {
@@ -395,16 +444,16 @@ class NeoPatterns : public Adafruit_NeoPixel
     */
     void PowercellUpdate()
     {
-      for (uint8_t i = CyclotronLEDCount; i < CyclotronLEDCount + PowerCellLEDs; i++)
+      for (uint8_t i = CyclotronLEDs; i < CyclotronLEDs + PowerCellLEDs; i++)
       {
 
         if (i == IndexPC)  // Scan Pixel to the right
         {
           setPixelColor(i, Color2);
         }
-        if (IndexPC == (CyclotronLEDCount + PowerCellLEDs - 1))
+        if (IndexPC == (CyclotronLEDs + PowerCellLEDs - 1))
         {
-          for (uint8_t j = CyclotronLEDCount; j < CyclotronLEDCount + PowerCellLEDs - 1; j++)
+          for (uint8_t j = CyclotronLEDs; j < CyclotronLEDs + PowerCellLEDs - 1; j++)
           {
             setPixelColor(j, Color(0, 0, 0));
           }
@@ -424,19 +473,19 @@ class NeoPatterns : public Adafruit_NeoPixel
       switch (themeMode)
       {
         case 0:
-          fade(0, 255, 0, 0, 0, 0, 200, 0, CyclotronLEDCount - 1);
+          fade(0, 255, 0, 0, 0, 0, 200, CyclotronLED1Start, CyclotronLED4End);
           break;
         case 1:
-          fade(0, 255, 0, 0, 0, 0, 200, 0, CyclotronLEDCount - 1);
+          fade(0, 60, 0, 0, 0, 190, 200, CyclotronLED1Start, CyclotronLED4End);
           break;
         case 2:
-          fade(0, 0, 0, 255, 0, 0, 200, 0, CyclotronLEDCount - 1);
+          fade(0, 0, 0, 255, 0, 0, 200, CyclotronLED1Start, CyclotronLED4End);
           break;
         case 3:
-          fade(0, 129, 0, 126, 0, 0, 200, 0, CyclotronLEDCount - 1);
+          fade(0, 129, 0, 126, 0, 0, 200, CyclotronLED1Start, CyclotronLED4End);
           break;
         case 4:
-          fade(0, 0, 0, 255, 0, 0, 200, 0, CyclotronLEDCount - 1);
+          fade(0, 0, 0, 255, 0, 0, 200, CyclotronLED1Start, CyclotronLED4End);
           break;
       }
       show();
@@ -448,79 +497,125 @@ class NeoPatterns : public Adafruit_NeoPixel
     */
     void CyclotronUpdate()
     {
-      if (themeMode == 1)
+      fadeStep = 0;
+      fadeComplete = false;
+      if (themeMode != 4)                   // *** Update LED's using normal pattern unless in Christmas Mode *** //
       {
-        circring();
+        switch (IndexC)
+        {
+          case 0:
+            if (cycNormalStart == false && themeMode != 2)     // *** First clear boot LED's unless in Slime Mode *** //
+            {
+              for (int i = CyclotronLED1Start; i <= CyclotronLED4End; i++)
+              {
+                setPixelColor(i, 0);
+              }
+            }
+            cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  1);
+            //              cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  0);
+
+            break;
+          case 1:
+            cycNormalStart = true;
+
+            cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  1);
+            //              cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  0);
+            break;
+          case 2:
+            cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  1);
+            //              cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  0);
+
+            break;
+          case 3:
+            //              cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  0);
+            //              cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  0);
+            cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  1);
+            break;
+        }
       }
       else
       {
-        for (uint8_t i = 0; i < CyclotronLEDs; i++)
+        // *** Christmas THEME LED routine *** //
+        switch (IndexC)
         {
-          //Serial.print(i);
-          if (i == IndexC)  // Scan Pixel to the right
-          {
-            if (CyclotronLEDArray[IndexC] == 1)
-            {
-              //Serial.println(IndexCLEDArray);
-              if (themeMode == 2)
-              {
-                //Serial.println(IndexCLEDArray);
-                setPixelColor(IndexCLEDArray, DimColor(getPixelColor(IndexCLEDArray)));
-                setPixelColor(IndexCLEDArray, DimColor(getPixelColor(IndexCLEDArray)));
-              }
-              else
-              {
-                setPixelColor(IndexCLEDArray, Color1);
-              }
-            }
-          }
-          else // Fading tail
-          {
-            if (CyclotronLEDArray[i] == 1)
-            {
-              if (i < CyclotronLEDCount)
-              {
-                if (themeMode != 4)
-                {
-                  if (themeMode == 2)
-                  {
-                    if (IndexCLEDArray != i)
-                    {
-                      setPixelColor(IndexCLEDArray - 1, Color1);
-                    }
+          case 0:
+            cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  1);
+            cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  2);
+            cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  1);
+            cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  2);
+            break;
+          case 1:
+            cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  2);
+            cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  1);
+            cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  2);
+            cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  1);
+            break;
+          case 2:
+            cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  1);
+            cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  2);
+            cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  1);
+            cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  2);
+            break;
+          case 3:
+            cyclotronLEDUpdate(CyclotronLED1Start,  CyclotronLED1End,  2);
+            cyclotronLEDUpdate(CyclotronLED2Start,  CyclotronLED2End,  1);
+            cyclotronLEDUpdate(CyclotronLED3Start,  CyclotronLED3End,  2);
+            cyclotronLEDUpdate(CyclotronLED4Start,  CyclotronLED4End,  1);
+            break;
 
-                  }
-                }
-              }
-            }
-            if (i < CyclotronLEDCount)
-            {
-              if (themeMode != 4 && themeMode != 2)
-              {
-                {
-                  setPixelColor(i, DimColor(getPixelColor(i)));
-                }
-              }
-            }
-          }
         }
-        IncrementC();
       }
+
       show();
+      IncrementC();
     }
 
+    /*
+     * Cyclotron LED helper for the Neopixel Jewels
+     */
+    void cyclotronLEDUpdate(uint8_t cycStart, uint8_t cycEnd, uint8_t cycState)
+    {
+      switch (cycState)
+      {
+        case 0:
+          for (int i = cycStart; i <= cycEnd; i++)
+          {
+            setPixelColor(i, 0);
+          }
+          break;
 
+        case 1:
+          for (int i = cycStart; i <= cycEnd; i++)
+          {
+            setPixelColor(i, Color1);
+          }
+          break;
+        case 2:
+          for (int i = cycStart; i <= cycEnd; i++)
+          {
+            setPixelColor(i, Wheel(255));
+          }
+          break;
+      }
+    }
 
     /*
-       Venting Pack LED Update Function
-    */
+     * Venting Pack LED Update Function
+     */
     void VentPackUpdate()
     {
       for (uint8_t i = 0; i < CyclotronLEDs; i++)
       {
         setPixelColor(i, Color1);
       }
-      for (uint8_t i = CyclotronLEDCount; i < CyclotronLEDCount + PowerCellLEDs; i++)
+      for (uint8_t i = CyclotronLEDs; i < CyclotronLEDs + PowerCellLEDs; i++)
       {
         setPixelColor(i, Color2);
       }
@@ -528,8 +623,8 @@ class NeoPatterns : public Adafruit_NeoPixel
     }
 
     /*
-       Power down LED Update Function
-    */
+     * Power down LED Update Function
+     */
     void PowerDownUpdate()
     {
       for (uint8_t i = 0; i < numPixels(); i++)
@@ -541,11 +636,11 @@ class NeoPatterns : public Adafruit_NeoPixel
     }
 
     /*
-       Clear Powercell Update Function
-    */
+     * Clear Powercell Update Function
+     */
     void PowercellClear()
     {
-      for (uint8_t i = CyclotronLEDCount; i < CyclotronLEDCount  + PowerCellLEDs; i++)
+      for (uint8_t i = CyclotronLEDs; i < CyclotronLEDs + PowerCellLEDs; i++)
       {
         setPixelColor(i, Color(0, 0, 0));
       }
@@ -553,8 +648,8 @@ class NeoPatterns : public Adafruit_NeoPixel
     }
 
     /*
-       Change the time interval of the powercell during firing
-    */
+     * Change the time interval of the powercell during firing
+     */
     void PowercellInterval(uint32_t interval)
     {
       Interval2 = interval;
@@ -576,32 +671,40 @@ class NeoPatterns : public Adafruit_NeoPixel
     }
 
     /*
-       Change the time interval of the cyclotron during firing
-    */
-    void CyclotronInterval(uint8_t interval)
+     * Change the time interval of the cyclotron during firing
+     */
+    void CyclotronInterval(uint32_t interval, uint8_t fadeInt )
     {
-      if (themeMode == 1)
+      // *** The following adjusts the fading speed to keep up with the cyclotron intervan change *** //
+      if (fadeInt && (((float(interval)) / float(Interval)) < 0.92))
       {
-        setBrightness(240);
+
+        if (cycfadeTimer > 5)
+        {
+          Serial.println(cycfadeTimer);
+          cycfadeTimer--;
+          if (FadeCycChange > 0)
+          {
+            FadeCycChange = FadeCyc - 10;
+          }
+        }
       }
-      else
-      {
-        Interval = interval;
-      }
+      IntervalChange = interval;
+      IntervalChangeFlag = true;
     }
 
     /*
-       Change the cyclotron intervals
-    */
+     * Change the cyclotron intervals
+     */
     void IntervalChangeCall()
     {
       Interval = IntervalChange;
-      //FadeCyc = FadeCycChange;
+      FadeCyc = FadeCycChange;
     }
 
     /*
-       The following are support functions from Adafruit to help with setting colors, diming.
-    */
+     * The following are support functions from Adafruit to help with setting colors, diming.
+     */
     // Calculate 50% dimmed version of a color (used by ScannerUpdate)
     uint32_t DimColor(uint32_t color)
     {
@@ -650,10 +753,10 @@ class NeoPatterns : public Adafruit_NeoPixel
     }
 
     /*
-       This is a fading function that is used to help with the cyclotron fading and power up.
-
-       Its sligntly modified to help fade only selected LED's that are called.
-    */
+     * This is a fading function that is used to help with the cyclotron fading and power up.
+     *
+     * Its sligntly modified to help fade only selected LED's that are called.
+     */
     void fade(byte redStartValue, byte redEndValue, byte greenStartValue, byte greenEndValue, byte blueStartValue, byte blueEndValue, int totalSteps, int startLED, int endLED)
     {
       static float redIncrement, greenIncrement, blueIncrement;
@@ -736,36 +839,4 @@ class NeoPatterns : public Adafruit_NeoPixel
       }
     }
 
-    // Quick routine to change the speed of the cyclotron for the Afterlife Mode.
-    void AL_Fire(bool IsFire)
-    {
-      if (IsFire == true) {
-        AfterLifeFiring = true;
-      }
-      else
-      {
-        AfterLifeFiring = false;
-      }
-    }
-
-
-    void circring()
-    {
-      for (uint8_t i = 0; i < NUM_LEDS; i++) {                                                               // We can't do a fill_solid as we need to use a modulus operator to wrap around the strand.
-        setPixelColor(i, Color(0, 0, 0));
-      }
-      if (AfterLifeFiring == false)
-      {
-         mytime = (millis() / 3) % NUM_LEDS;
-      }
-      else
-      {
-        mytime = (millis() / 2) % NUM_LEDS;
-      }
-      uint8_t mylen = beatsin8(15, 3, NUM_LEDS / 4);
-
-      for (uint8_t i = 0; i < mylen; i++) {                                                               // We can't do a fill_solid as we need to use a modulus operator to wrap around the strand.
-        setPixelColor(((mytime + i) % NUM_LEDS), Color(255, 0, 0));
-      }
-    } // circring()
 };
