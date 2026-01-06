@@ -1,0 +1,62 @@
+ProtonPack Firmware Update Guide
+For Arduino Nano (ATmega328P)
+
+This guide will help you upload the latest firmware to your ProtonPack kit without needing to write code or install the full Arduino software.
+
+1. Prerequisites
+
+Before you begin, ensure you have the following:
+
+The Firmware File: Look for the file ending in .hex in this folder (e.g., ProtonPack_v1.hex).
+
+USB Cable: A Mini-USB cable to connect the Nano to your computer.
+
+Drivers (Important for Clones): Most Arduino Nano clones use the CH340 chip. If you plug in your board and your computer does not make a sound or see it, you likely need to install the CH340 driver.
+
+Windows/Mac Drivers can be found here: [Search for "CH340 Drivers" online]
+
+2. Instructions for Windows Users (Easiest)
+
+We recommend using a free, lightweight tool called XLoader.
+
+Step 1: Download XLoader Download "XLoader" from a trusted source (usually available on GitHub or various maker websites) and unzip the folder.
+
+Step 2: Connect your Board Plug your Arduino Nano into your USB port.
+
+Step 3: Configure XLoader Open XLoader.exe and use the following settings:
+
+Hex File: Click the ... button and select the .hex firmware file from this folder.
+
+Device: Select Nano(ATmega328).
+
+COM Port: Select the COM port your board is connected to (e.g., COM3, COM4). If multiple appear, try the highest number.
+
+Baud Rate: 57600
+
+Note: This specific speed (57600) is required for "Old Bootloader" Nano clones. If you use the standard 115200, the upload will fail.
+
+Step 4: Upload Click the Upload button. You should see the lights on your Nano flash rapidly.
+
+Success: The status line will say "X bytes uploaded."
+
+Failure: If it gets stuck on "Uploading...", check your COM port or try changing the Baud Rate to 115200 (some newer clones use the new speed).
+
+3. Instructions for Mac Users
+
+Mac users can use the "Terminal" app (pre-installed on every Mac) and a tool called avrdude.
+
+Step 1: Install Avrdude Open Terminal (Command + Space, type "Terminal") and install avrdude using Homebrew: brew install avrdude (If you do not have Homebrew, visit brew.sh to install it first).
+
+Step 2: Find your Port Type the following command to find your Nano's ID: ls /dev/tty.* Look for something like /dev/tty.usbserial-XXXX or /dev/tty.wchusbserialXXXX.
+
+Step 3: Upload Command Run the following command (replace YOUR_FILE.hex with the actual filename and YOUR_PORT with the port you found above):
+
+Bash
+avrdude -v -p atmega328p -c arduino -P YOUR_PORT -b 57600 -D -U flash:w:YOUR_FILE.hex:i
+Note: If this fails, try changing -b 57600 to -b 115200.
+
+Troubleshooting
+
+"Upload Failed" or Stuck: Unplug the USB, plug it back in, and try the other Baud Rate (115200).
+
+Computer won't see the board: You are likely missing the CH340 Driver. Install it and restart your computer.
