@@ -17,7 +17,7 @@
 
 // ===================================================================================
 // FILE: Test_All_LEDs.ino (Corrected Version)
-// PURPOSE: This sketch tests the wiring of the bargraph by turning on each of the
+// PURPOSE: This sketch tests the wiring of the bargraph by turning on each of the/Users/rbalboa8/Documents/Arduino/libraries/GB_Bargraph_Sequence/BGSequence.cpp
 //          28 LEDs one by one, in sequence. It's the best way to confirm that
 //          every LED is connected correctly and that the mapping is right.
 // ===================================================================================
